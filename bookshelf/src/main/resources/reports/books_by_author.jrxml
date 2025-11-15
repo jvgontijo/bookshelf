@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD Report Design//EN"
+        "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+        name="books_by_author"
+        pageWidth="595"
+        pageHeight="842"
+        columnWidth="535"
+        leftMargin="30"
+        rightMargin="30"
+        topMargin="20"
+        bottomMargin="20">
+
+    <!-- Parâmetros -->
+    <parameter name="REPORT_TITLE" class="java.lang.String"/>
+
+    <!-- Campos que vêm de BooksByAuthorViewResponse -->
+    <field name="authorName" class="java.lang.String"/>
+    <field name="bookTitle" class="java.lang.String"/>
+    <field name="publicationYear" class="java.lang.Integer"/>
+    <field name="bookPrice" class="java.math.BigDecimal"/>
+    <field name="subjectDescription" class="java.lang.String"/>
+
+    <!-- Título -->
+    <title>
+        <band height="40">
+            <staticText>
+                <reportElement x="0" y="0" width="535" height="20"/>
+                <textElement textAlignment="Center" verticalAlignment="Middle">
+                    <font size="16" isBold="true"/>
+                </textElement>
+                <text><![CDATA[$P{REPORT_TITLE}]]></text>
+            </staticText>
+        </band>
+    </title>
+
+    <!-- Cabeçalho das colunas -->
+    <columnHeader>
+        <band height="20">
+            <staticText>
+                <reportElement x="0" y="0" width="150" height="20"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Autor]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="150" y="0" width="150" height="20"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Título]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="300" y="0" width="60" height="20"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Ano]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="360" y="0" width="80" height="20"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Preço]]></text>
+            </staticText>
+
+            <staticText>
+                <reportElement x="440" y="0" width="95" height="20"/>
+                <textElement>
+                    <font isBold="true"/>
+                </textElement>
+                <text><![CDATA[Assunto]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+
+    <!-- Linhas -->
+    <detail>
+        <band height="20">
+            <textField isBlankWhenNull="true">
+                <reportElement x="0" y="0" width="150" height="20"/>
+                <textFieldExpression><![CDATA[$F{authorName}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement x="150" y="0" width="150" height="20"/>
+                <textFieldExpression><![CDATA[$F{bookTitle}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement x="300" y="0" width="60" height="20"/>
+                <textFieldExpression><![CDATA[$F{publicationYear}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true" pattern="R$ #,##0.00">
+                <reportElement x="360" y="0" width="80" height="20"/>
+                <textFieldExpression><![CDATA[$F{bookPrice}]]></textFieldExpression>
+            </textField>
+
+            <textField isBlankWhenNull="true">
+                <reportElement x="440" y="0" width="95" height="20"/>
+                <textFieldExpression><![CDATA[$F{subjectDescription}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+
+</jasperReport>
