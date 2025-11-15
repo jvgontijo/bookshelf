@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<h2>Livros</h2>
+	<button class="btn btn-primary" (click)="onNew()">
+		Novo livro
+	</button>
+</div>
+
+<div *ngIf="loading" class="alert alert-info">
+	Carregando livros...
+</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">
+	{{ errorMessage }}
+</div>
+
+<table class="table table-striped table-hover" *ngIf="!loading && books.length > 0">
+	<thead class="table-dark">
+		<tr>
+			<th>Título</th>
+			<th>Ano</th>
+			<th>Assunto</th>
+			<th>Autores</th>
+			<th>Preço (R$)</th>
+			<th class="text-end">Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let book of books">
+			<td>{{ book.title }}</td>
+			<td>{{ book.publicationYear }}</td>
+			<td>{{ book.subject.description }}</td>
+			<td>
+				<span *ngFor="let author of book.authors; let last = last">
+					{{ author.name }}<span *ngIf="!last">, </span>
+				</span>
+			</td>
+			<td>{{ book.price | number:'1.2-2' }}</td>
+			<td class="text-end">
+				<button
+					class="btn btn-sm btn-outline-secondary me-2"
+					(click)="onEdit(book)"
+				>
+					Editar
+				</button>
+				<button
+					class="btn btn-sm btn-outline-danger"
+					(click)="onDelete(book)"
+				>
+					Excluir
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div *ngIf="!loading && books.length === 0" class="alert alert-secondary">
+	Nenhum livro cadastrado.
+</div>

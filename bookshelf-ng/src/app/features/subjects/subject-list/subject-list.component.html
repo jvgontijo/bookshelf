@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<h2>Assuntos</h2>
+	<a class="btn btn-primary" routerLink="/subjects/new">Novo assunto</a>
+</div>
+
+<div *ngIf="loading" class="alert alert-info">Carregando assuntos...</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">
+	{{ errorMessage }}
+</div>
+
+<table class="table table-striped" *ngIf="!loading && subjects.length > 0">
+	<thead>
+		<tr>
+			<th style="width: 80px">ID</th>
+			<th>Descrição</th>
+			<th style="width: 180px" class="text-end">Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let subject of subjects">
+			<td>{{ subject.id }}</td>
+			<td>{{ subject.description }}</td>
+			<td class="text-end">
+				<a
+					class="btn btn-sm btn-outline-secondary me-2"
+					[routerLink]="['/subjects', subject.id, 'edit']"
+				>
+					Editar
+				</a>
+				<button
+					class="btn btn-sm btn-outline-danger"
+					type="button"
+					(click)="onDelete(subject)"
+				>
+					Excluir
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div *ngIf="!loading && !subjects.length && !errorMessage" class="alert alert-secondary">
+	Nenhum assunto cadastrado.
+</div>

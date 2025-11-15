@@ -1,0 +1,45 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+	<h2>Autores</h2>
+	<a class="btn btn-primary" routerLink="/authors/new">Novo autor</a>
+</div>
+
+<div *ngIf="loading" class="alert alert-info">Carregando autores...</div>
+
+<div *ngIf="errorMessage" class="alert alert-danger">
+	{{ errorMessage }}
+</div>
+
+<table class="table table-striped" *ngIf="!loading && authors.length > 0">
+	<thead>
+		<tr>
+			<th style="width: 80px">ID</th>
+			<th>Nome</th>
+			<th style="width: 180px" class="text-end">Ações</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr *ngFor="let author of authors">
+			<td>{{ author.id }}</td>
+			<td>{{ author.name }}</td>
+			<td class="text-end">
+				<a
+					class="btn btn-sm btn-outline-secondary me-2"
+					[routerLink]="['/authors', author.id, 'edit']"
+				>
+					Editar
+				</a>
+				<button
+					class="btn btn-sm btn-outline-danger"
+					type="button"
+					(click)="onDelete(author)"
+				>
+					Excluir
+				</button>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div *ngIf="!loading && !authors.length && !errorMessage" class="alert alert-secondary">
+	Nenhum autor cadastrado.
+</div>
