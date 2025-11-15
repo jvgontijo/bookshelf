@@ -23,7 +23,6 @@ public class BooksByAuthorViewService {
 				author_name,
 				book_id,
 				book_title,
-				book_isbn,
 				publication_year,
 				book_price,
 				subject_id,
@@ -49,7 +48,6 @@ public class BooksByAuthorViewService {
         String authorName = (String) row[i++];
         Long bookId = ((Number) row[i++]).longValue();
         String bookTitle = (String) row[i++];
-        String bookIsbn = (String) row[i++];
         Integer publicationYear = row[i] != null ? ((Number) row[i]).intValue() : null;
         i++;
         BigDecimal bookPrice = (BigDecimal) row[i++];
@@ -61,7 +59,6 @@ public class BooksByAuthorViewService {
             authorName,
             bookId,
             bookTitle,
-            bookIsbn,
             publicationYear,
             bookPrice,
             subjectId,

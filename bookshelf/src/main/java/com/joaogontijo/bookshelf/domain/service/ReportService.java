@@ -1,43 +1,57 @@
 package com.joaogontijo.bookshelf.domain.service;
 
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
+import com.joaogontijo.bookshelf.api.dto.BooksByAuthorViewResponse;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import javax.sql.DataSource;
 import java.io.InputStream;
-import java.sql.Connection;
-import java.util.Collections;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
 public class ReportService {
 
-    private final DataSource dataSource;
+    private final BooksByAuthorViewService booksByAuthorViewService;
 
-    public ReportService(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public ReportService(BooksByAuthorViewService booksByAuthorViewService) {
+        this.booksByAuthorViewService = booksByAuthorViewService;
     }
 
     public byte[] generateBooksByAuthorPdf() {
-        try (
-            Connection connection = dataSource.getConnection();
-            InputStream reportStream = new ClassPathResource("reports/books_by_author.jasper").getInputStream()
-        ) {
-            Map<String, Object> parameters = Collections.emptyMap();
+        try {
+            List<BooksByAuthorViewResponse> data = booksByAuthorViewService.findAll();
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                reportStream,
-                parameters,
-                connection
-            );
+            ClassPathResource resource =
+                new ClassPathResource("reports/books_by_author.jrxml");
+
+            if (!resource.exists()) {
+                throw new IllegalStateException(
+                    "Arquivo JRXML não encontrado em classpath: reports/books_by_author.jrxml"
+                );
+            }
+
+            JasperReport jasperReport;
+            try (InputStream is = resource.getInputStream()) {
+                jasperReport = JasperCompileManager.compileReport(is);
+            }
+
+            JRBeanCollectionDataSource dataSource =
+                new JRBeanCollectionDataSource(data);
+
+            Map<String, Object> params = new HashMap<>();
+            params.put("REPORT_TITLE", "Livros por autor");
+
+            JasperPrint jasperPrint =
+                JasperFillManager.fillReport(jasperReport, params, dataSource);
 
             return JasperExportManager.exportReportToPdf(jasperPrint);
-        } catch (Exception ex) {
-            // Aqui você pode criar uma BusinessException específica para relatório, se quiser.
-            throw new RuntimeException("Erro ao gerar relatório de livros por autor.", ex);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao gerar relatório de livros por autor.", e);
         }
     }
 }

@@ -7,7 +7,6 @@ public record BooksByAuthorViewResponse(
     String authorName,
     Long bookId,
     String bookTitle,
-    String bookIsbn,
     Integer publicationYear,
     BigDecimal bookPrice,
     Long subjectId,
